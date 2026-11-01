@@ -1,7 +1,5 @@
-# The organizers rebuild this file from your factsheet and the leaderboard, so it only has to be valid here.
-team: DeepSeaSight               # exactly as registered on macvi.org (macvi.org user #2097)
-track: eurs-t2                    # eurs-t1 or eurs-t2
+team: OffshorePixels             # (macvi.org user #2097)
+track: eurs-t2                    
 submission_id: 19180              # best-scoring TESTING-PHASE submission in this track (composite 0.385)
-                                   # file: T2_01_new_alt_k3a2.5.onnx -- "new_alt" student (v4 half-res trunk 40,2; S=448), k3a2.5 sharpening
-contact: divya9light@gmail.com    # TODO: replace if the team wants a different contact address monitored Oct 28-30
-hardware: 2x NVIDIA T4 (Kaggle, training/export); evaluated by the organizers on a Jetson AGX Orin
+contact: divyaamahendra@gmail.com 
+hardware: 2x NVIDIA T4 (Kaggle, training/export)
