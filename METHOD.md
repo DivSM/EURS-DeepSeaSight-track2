@@ -1,9 +1,11 @@
 # Method description
 
-Team: **DeepSeaSight** (macvi.org user #2097)   Track(s): **2** (a separate repository + `METHOD.md` covers Track 1)
-Reported testing-phase submission: **#19180** (`T2_01_new_alt_k3a2.5.onnx`, composite **0.385**)
+Team: **OffshorePixels** (macvi.org user #2097)  
+Method: **DeepSeaSight**    
+Track(s): **2**  
+Submission: **#19180** (composite **0.385**)
 
-## Approach (one page at most)
+## Approach
 
 A single network (`src/student_net.py`, class `StudentNet`) maps one RGB image directly to both outputs,
 `(restored_image, seg_logits)`, in one forward pass, within the challenge's 1.0 M parameter / 12 GFLOPs budget
@@ -14,7 +16,7 @@ entire pipeline - there is no separate pre- or post-processing script.
 * **Encoder**: `lcnet_075.ra2_in1k` (PP-LCNet, width multiplier 0.75) via `timm`, ImageNet-pretrained before
   fine-tuning on EURS. Chosen for its very low GFLOPs/parameter cost relative to accuracy, which is essential
   under the challenge's hard compute budget.
-* **Segmentation head**: a feature-pyramid-style fusion of the encoder's four stages (1x1 lateral convs to a
+* **Segmentation head**: A feature-pyramid-style fusion of the encoder's four stages (1x1 lateral convs to a
   common width + a global-context term, depth-wise-separable smoothing, concatenate-and-fuse), a 1x1
   classifier, and a lightweight image-guided refinement (`seg_ref`) that looks at the exposed input image and
   the coarse logits together. A single **calibrated per-class logit offset** (background/coral/fish/
@@ -60,7 +62,7 @@ Trained on the EURS training split released by the organizers. **All external da
 6. **AdamW** optimiser [5]; no other pretrained checkpoints, no synthetic-data generators and no test-time
    adaptation of any kind.
 
-Full IEEE references are given in the factsheet's bibliography; repeated at the end of this file for convenience.
+References are given in the factsheet's bibliography; repeated at the end of this file for convenience.
 
 ## Anything non-standard at inference
 
@@ -72,12 +74,11 @@ Full IEEE references are given in the factsheet's bibliography; repeated at the 
   (`[0.0, -1.0499999523162842, -2.0999999046325684, -1.9199999570846558, 0.0]`) - the shrink compensates for the
   held-out search being run on a model variant that saw less training data than the one actually exported, a
   fixed, one-time correction, not anything computed from test images.
-* **Sharpening strength chosen by testing-phase leaderboard score, not by looking at any test image.** A small,
+* **Sharpening strength chosen by testing-phase score, not by looking at any test image.** A small,
   fixed set of ONNX files - differing only in this one appended post-processing step (no sharpening, box-blur
   amount 2.0, amount 2.5) - was prepared in advance from the identical network output and compared on the
   testing-phase leaderboard; the reported submission is the best-scoring one, "k3a2.5" (3x3 box blur, amount
-  2.5). This is the one global, fixed choice the template README explicitly allows ("choosing between your own
-  submissions ... from the leaderboard scores of your testing-phase submissions").
+  2.5).
 * No test-time augmentation, no ensembling, no tiling: one forward pass of one network per image.
 
 ## Reproduction notes
@@ -90,10 +91,12 @@ Full IEEE references are given in the factsheet's bibliography; repeated at the 
 * `model_dir` (= `weights/`) must contain `student_B.pt`, the state dict of `StudentNet(enc="lcnet_075.ra2_in1k",
   d=56, trunk_c=40, trunk_nb=2, trunk_cf=12)` with the calibrated `bias` buffer already baked in - see
   `weights/README.md` for exactly how to produce this file from the team's own training checkpoint.
-* Training code is not included here (not required by the template); it is the team's private Kaggle notebooks.
-* **IEEE references**
-  [1] C. Cui et al., "PP-LCNet: A Lightweight CPU Convolutional Neural Network," arXiv:2109.15099, 2021.
-  [2] J. Sauder, V. Minh, I. Fdhila, E. Chimani, T. Krueger, and M. Michel, "The Coralscapes Dataset: Semantic Scene Understanding in Coral Reefs," arXiv:2503.20000, 2025.
-  [3] H. Li, S. Lian, Z. Li, R. Cong, C. Li, L. T. Yang, W. Zhang, and S. Kwong, "Advancing Marine Research: UWSAM Framework and UIIS10K Dataset for Precise Underwater Instance Segmentation," arXiv:2505.15581, 2025.
-  [4] S. Lian, Z. Zhang, H. Li, W. Li, L. T. Yang, S. Kwong, and R. Cong, "Diving into Underwater: Segment Anything Model Guided Underwater Salient Instance Segmentation and A Large-scale Dataset," in *Proc. 41st Int. Conf. Mach. Learn. (ICML)*, 2024.
-  [5] I. Loshchilov and F. Hutter, "Decoupled Weight Decay Regularization," in *Proc. Int. Conf. Learn. Representations (ICLR)*, 2019.
+* Training code is not included here.
+
+**References**  
+
+[1] C. Cui et al., "PP-LCNet: A Lightweight CPU Convolutional Neural Network," arXiv:2109.15099, 2021.  
+[2] J. Sauder, V. Minh, I. Fdhila, E. Chimani, T. Krueger, and M. Michel, "The Coralscapes Dataset: Semantic Scene Understanding in Coral Reefs," arXiv:2503.20000, 2025.  
+[3] H. Li, S. Lian, Z. Li, R. Cong, C. Li, L. T. Yang, W. Zhang, and S. Kwong, "Advancing Marine Research: UWSAM Framework and UIIS10K Dataset for Precise Underwater Instance Segmentation," arXiv:2505.15581, 2025.  
+[4] S. Lian, Z. Zhang, H. Li, W. Li, L. T. Yang, S. Kwong, and R. Cong, "Diving into Underwater: Segment Anything Model Guided Underwater Salient Instance Segmentation and A Large-scale Dataset," in *Proc. 41st Int. Conf. Mach. Learn. (ICML)*, 2024.  
+[5] I. Loshchilov and F. Hutter, "Decoupled Weight Decay Regularization," in *Proc. Int. Conf. Learn. Representations (ICLR)*, 2019.  
