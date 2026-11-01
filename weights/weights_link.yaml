@@ -1,0 +1,11 @@
+# TODO (team action required): this is still the template placeholder.
+#
+# ONLY needed if the team prefers a public link instead of committing weights/student_B.pt directly (it is small
+# enough - about 3 MB - that committing it is simpler; see weights/README.md). If you commit the file instead,
+# DELETE this file entirely (one way or the other, not both).
+#
+# Accepted hosts: a direct link, a GitHub release asset, Hugging Face, Dropbox, or a Google Drive FILE link
+# shared with "anyone with the link".
+url: https://example.org/path/to/student_B.pt
+sha256: 0000000000000000000000000000000000000000000000000000000000000000   # sha256sum of that file
+filename: student_B.pt
